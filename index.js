@@ -136,9 +136,10 @@ app.delete("/todos/:todoId", authenticateToken, async (req, res) => {
         const userId = req.user.id
         const todoId = req.params.todoId
 
-        const deletedTodo = await Todo.findOneAndDelete({_id: userId, user: todoId})
+        const deletedTodo = await Todo.findOneAndDelete({ _id: todoId, user: userId });
         if(!deletedTodo){
-            return res.status(404).json({message:"Todo not deleted"})
+            // console.log(userId + todoId)
+            return res.status(404).json({message:"not deleted"})
         }
         res.json({message:"todo deleted successfully"})
     } catch (error) {
