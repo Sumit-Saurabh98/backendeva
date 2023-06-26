@@ -12,18 +12,16 @@ const app = express();
 app.use(express.json())
 app.use(cors())
 
-const MONGODB_URL = process.env.MONGODB_URL
 
-mongoose.connect(MONGODB_URL)
+mongoose.connect(process.env.MONGODB_URL)
 
-const JWT_SECRET = process.env.JWT_SECRET
 
 const generateToken = (user)=>{
     const payload = {
         id:user._id,
         email:user.email
     }
-    return jwt.sign(payload, JWT_SECRET, {expiresIn:"60d"})
+    return jwt.sign(payload, process.env.JWT_SECRET, {expiresIn:"60d"})
 }
 
 const authenticateToken = (req, res, next) => {
@@ -32,7 +30,7 @@ const authenticateToken = (req, res, next) => {
         return res.status(401).json({message: "No token Provided"})
     }
     try {
-        var decoded = jwt.verify(token, JWT_SECRET);
+        var decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded
         next()
     } catch (error) {
@@ -153,7 +151,6 @@ app.delete("/todos/:todoId", authenticateToken, async (req, res) => {
 
 app.listen(process.env.PORT, async() => {
     try {
-        // await connection()
         console.log(`listening on ${process.env.PORT}`)
     } catch (error) {
         console.log('error', error)
