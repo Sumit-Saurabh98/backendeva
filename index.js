@@ -25,7 +25,7 @@ const generateToken = (user)=>{
 }
 
 const authenticateToken = (req, res, next) => {
-    const token = req.headers('Authorization');
+    const token = req.headers['authorization'];
     if(!token){
         return res.status(401).json({message: "No token Provided"})
     }
@@ -95,7 +95,7 @@ app.get('/todos', authenticateToken, async (req, res) => {
     }
 })
 
-app.post('./todos', authenticateToken, async(req, res)=>{
+app.post('/todos', authenticateToken, async(req, res)=>{
     try {
         const{taskname, status, tag} = req.body
         const userId = req.user.id
@@ -113,7 +113,7 @@ app.post('./todos', authenticateToken, async(req, res)=>{
     }
 })
 
-app.put("./todos/:todoId", authenticateToken, async(req, res)=>{
+app.put("/todos/:todoId", authenticateToken, async(req, res)=>{
 
     try {
         const {taskname, status, tag} = req.body
